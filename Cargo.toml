@@ -16,3 +16,4 @@ name = "common"
 path = "src/common/lib.rs"
 
 [dependencies]
+clap = "2.33.1"
