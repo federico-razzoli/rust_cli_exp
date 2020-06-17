@@ -1,7 +1,7 @@
 [package]
-name = "multibin"
+name = "cli_exp"
 version = "0.1.0"
-authors = ["timglabisch <tim@ainfach.de>"]
+authors = ["Federico Razzoli <hello@federico-razzoli.com>"]
 
 [[bin]]
 name = "reducer_day"
