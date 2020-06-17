@@ -2,7 +2,8 @@ extern crate common;
 use common::foo;
 
 // NOTE:
-// using this crate and doing nearly nothing with it
+// using this crate with default features enabled
+// and doing nearly nothing with it
 // makes a binary more than 600K bigger.
 extern crate clap;
 use clap::{Arg, App, SubCommand};
