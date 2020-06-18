@@ -1,5 +1,5 @@
 extern crate common;
-use common::foo;
+use common::scanner::long_range_scanner;
 
 // NOTE:
 // using this crate with default features enabled
@@ -35,5 +35,5 @@ fn main() {
         )
         .get_matches();
 
-    foo::foo();
+    long_range_scanner::scan();
 }
