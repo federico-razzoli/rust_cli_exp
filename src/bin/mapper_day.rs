@@ -1,9 +1,11 @@
 extern crate common;
 use common::scanner::long_range_scanner;
 use common::stylesheet::stylesheet;
+use common::stylesheet::StyleProperties;
+use common::stylesheet::StyleTransformation;
+use common::stylesheet::StyleColor;
 
-extern crate console;
-use console::Style;
+use std::option::Option;
 
 
 // NOTE:
@@ -40,11 +42,15 @@ fn main() {
         )
         .get_matches();
 
-    let alert = long_range_scanner::scan();
+    long_range_scanner::scan();
 
     let mut sheet = stylesheet::new();
-    stylesheet::add_style(&mut sheet, "default", Style::new());
-    stylesheet::add_style(&mut sheet, "danger", Style::new().red().bold());
+    stylesheet::add_style(&mut sheet, "default", StyleProperties {
+        transformation: [].to_vec(), color: None, background: None
+    });
+    stylesheet::add_style(&mut sheet, "danger", StyleProperties {
+        transformation: [StyleTransformation::Bold, StyleTransformation::Blink].to_vec(), color: Some(StyleColor::Red), background: Some(StyleColor::White)
+    });
 
     //println!("{}", alert.apply_to("ALERT: Romulan ship approaching!"));
     let alert = stylesheet::get_style(sheet, "danger");
