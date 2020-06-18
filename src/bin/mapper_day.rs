@@ -36,6 +36,4 @@ fn main() {
         .get_matches();
 
     foo::foo();
-
-    println!("Hello, world!");
 }
