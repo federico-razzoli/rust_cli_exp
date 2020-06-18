@@ -45,9 +45,6 @@ fn main() {
     long_range_scanner::scan();
 
     let mut sheet = stylesheet::new();
-    stylesheet::add_style(&mut sheet, "default", StyleProperties {
-        transformation: [].to_vec(), color: None, background: None
-    });
     stylesheet::add_style(&mut sheet, "danger", StyleProperties {
         transformation: [StyleTransformation::Bold, StyleTransformation::Blink].to_vec(), color: Some(StyleColor::Red), background: Some(StyleColor::White)
     });

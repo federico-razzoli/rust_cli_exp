@@ -30,7 +30,9 @@ pub mod stylesheet {
     use self::console::Style;
 
     pub fn new<'a>() -> HashMap<&'a str, Style> {
-        HashMap::new()
+        let mut hash: HashMap<&str, Style> = HashMap::new();
+        hash.insert("default", Style::new());
+        hash
     }
 
     pub fn add_style(
