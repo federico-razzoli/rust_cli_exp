@@ -31,4 +31,3 @@ cli_exp is maintained by Federico Razzoli, see Cargo.toml.
 
 However, it was originary forked from rust_multibin, by @timglabisch. He wrote the boilerplate
 to compile multiple binaries from a single project.
-
