@@ -5,15 +5,13 @@ use common::stylesheet::StyleProperties;
 use common::stylesheet::StyleTransformation;
 use common::stylesheet::StyleColor;
 
-use std::option::Option;
-
 
 // NOTE:
 // using this crate with default features enabled
 // and doing nearly nothing with it
 // makes a binary more than 600K bigger.
 extern crate clap;
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App};
 
 
 struct AppInfo<'a> {
@@ -30,7 +28,7 @@ const APP_INFO: AppInfo<'static> = AppInfo {
 
 
 fn main() {
-    let options = App::new(APP_INFO.name)
+    App::new(APP_INFO.name)
         .about(APP_INFO.description)
         .version(APP_INFO.version)
         .arg(
