@@ -116,7 +116,7 @@ pub mod stylesheet {
         sheet.insert(style_name, style);
     }
 
-    /// Print a string reference, applying to it a style.
+    /// Print a line (string reference), applying to it a single style.
     ///
     /// # Arguments
     ///
