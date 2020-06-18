@@ -50,6 +50,5 @@ fn main() {
     });
 
     //println!("{}", alert.apply_to("ALERT: Romulan ship approaching!"));
-    let alert = stylesheet::get_style(sheet, "danger");
-    println!("{}", alert.apply_to("ALERT: Romulan ship approaching!"));
+    stylesheet::println("ALERT: Romulan ship approaching!", sheet, "danger");
 }

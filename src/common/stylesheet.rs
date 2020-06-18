@@ -75,11 +75,12 @@ pub mod stylesheet {
         sheet.insert(style_name, style);
     }
 
-    pub fn get_style<'a>(
+    pub fn println(
+            message: &str,
             sheet: HashMap<&str, Style>,
             style_name: &str
-        ) -> Style {
-        //println!("{:?}", sheet);
-        sheet.get(style_name).unwrap_or_else(|| sheet.get("default").unwrap()).clone()
+        ) {
+        let style = &sheet.get(style_name).unwrap_or_else(|| sheet.get("default").unwrap());
+        println!("{}", style.apply_to(message));
     }
 }
