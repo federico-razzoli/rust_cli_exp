@@ -76,8 +76,11 @@ pub mod stylesheet {
             style_name: &'static str,
             style_definition: super::StyleProperties
         ) {
+        // style is a handler from console::Style.
+        // Based on the contents of style_definition call style functions
+        // to create a proper style.
         let mut style: Style = Style::new();
-        // apply specified transformation
+        // apply all specified transformations, if any
         for s in &style_definition.transformation {
             match s {
                 super::StyleTransformation::Blink => style = style.blink(),
@@ -86,6 +89,7 @@ pub mod stylesheet {
                 super::StyleTransformation::Underlined => style = style.underlined(),
             }
         }
+        // apply specified text color, unless it is None
         if style_definition.color.is_some() {
             let color = &style_definition.color.unwrap();
             match color {
@@ -96,6 +100,7 @@ pub mod stylesheet {
                 super::StyleColor::Blue => style = style.blue(),
             }
         }
+        // apply specified background color, unless it is None
         if style_definition.background.is_some() {
             let color = &style_definition.background.unwrap();
             match color {
