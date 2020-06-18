@@ -1,5 +1,10 @@
 extern crate common;
 use common::scanner::long_range_scanner;
+use common::stylesheet::stylesheet;
+
+extern crate console;
+use console::Style;
+
 
 // NOTE:
 // using this crate with default features enabled
@@ -35,5 +40,13 @@ fn main() {
         )
         .get_matches();
 
-    long_range_scanner::scan();
+    let alert = long_range_scanner::scan();
+
+    let mut sheet = stylesheet::new();
+    stylesheet::add_style(&mut sheet, "normal", Style::new());
+    stylesheet::add_style(&mut sheet, "danger", Style::new().red().bold());
+
+    //println!("{}", alert.apply_to("ALERT: Romulan ship approaching!"));
+    let alert = stylesheet::get_style(sheet, "danger");
+    println!("{}", alert.apply_to("ALERT: Romulan ship approaching!"));
 }
