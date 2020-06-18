@@ -20,6 +20,6 @@ pub mod stylesheet {
             sheet: HashMap<&str, Style>,
             style_name: &str
         ) -> Style {
-        sheet.get(style_name).unwrap().clone()
+        sheet.get(style_name).unwrap_or_else(|| sheet.get("default").unwrap()).clone()
     }
 }

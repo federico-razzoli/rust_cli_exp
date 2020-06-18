@@ -43,7 +43,7 @@ fn main() {
     let alert = long_range_scanner::scan();
 
     let mut sheet = stylesheet::new();
-    stylesheet::add_style(&mut sheet, "normal", Style::new());
+    stylesheet::add_style(&mut sheet, "default", Style::new());
     stylesheet::add_style(&mut sheet, "danger", Style::new().red().bold());
 
     //println!("{}", alert.apply_to("ALERT: Romulan ship approaching!"));
