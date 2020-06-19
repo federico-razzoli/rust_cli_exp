@@ -10,6 +10,7 @@ pub enum StyleTransformation {
 /// Colors that can be used for texts and/or their backgrounds.
 #[derive(Debug, Clone)]
 pub enum StyleColor {
+    DefaultColor,
     Black,
     White,
     Red,
@@ -96,6 +97,7 @@ pub mod stylesheet {
         if style_definition.color.is_some() {
             let color = &style_definition.color.unwrap();
             match color {
+                super::StyleColor::DefaultColor => (),
                 super::StyleColor::Black => style = style.black(),
                 super::StyleColor::White => style = style.white(),
                 super::StyleColor::Red => style = style.red(),
@@ -107,6 +109,7 @@ pub mod stylesheet {
         if style_definition.background.is_some() {
             let color = &style_definition.background.unwrap();
             match color {
+                super::StyleColor::DefaultColor => (),
                 super::StyleColor::Black => style = style.on_black(),
                 super::StyleColor::White => style = style.on_white(),
                 super::StyleColor::Red => style = style.on_red(),
@@ -170,9 +173,17 @@ mod tests {
     fn add_empty_style() {
         let mut sheet = stylesheet::new();
         // must be able to retrieve an empty style and retrieve it
+        // there are more ways to achieve this
+
         let style_name = "empty_guy";
         stylesheet::add_style(&mut sheet, style_name,
             StyleProperties { transformation: [].to_vec(), color: None, background: None }
+        );
+        assert!(sheet.get(style_name).is_some());
+
+        let style_name = "empty_lady";
+        stylesheet::add_style(&mut sheet, style_name,
+            StyleProperties { transformation: [].to_vec(), color: DefaultColor, background: DefaultColor }
         );
         assert!(sheet.get(style_name).is_some());
     }
