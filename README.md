@@ -25,6 +25,15 @@ bin-name is the binary name as it is written in Cargo.toml, not a filename. Exam
 cargo run --bin mapper_day
 ```
 
+## Other Cargo tasks
+
+The stylesheet library includes tests and documentation:
+
+```
+cargo test
+cargo doc
+```
+
 ## Credits
 
 cli_exp is maintained by Federico Razzoli, see Cargo.toml.
