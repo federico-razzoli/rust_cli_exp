@@ -183,7 +183,7 @@ mod tests {
 
         let style_name = "empty_lady";
         stylesheet::add_style(&mut sheet, style_name,
-            StyleProperties { transformation: [].to_vec(), color: DefaultColor, background: DefaultColor }
+            StyleProperties { transformation: [].to_vec(), color: Some(DefaultColor), background: Some(DefaultColor) }
         );
         assert!(sheet.get(style_name).is_some());
     }
