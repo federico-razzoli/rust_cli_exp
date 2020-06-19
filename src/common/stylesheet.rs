@@ -75,7 +75,7 @@ pub mod stylesheet {
     /// use common::stylesheet::StyleTransformation::*;
     /// let mut sheet = stylesheet::new();
     /// stylesheet::add_style(&mut sheet, "danger", StyleProperties {
-    ///     transformation: [Bold, Blink].to_vec(), color: Some(Red), background: Some(White)
+    ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
     /// });
     /// ```
     pub fn add_style(
@@ -147,7 +147,7 @@ pub mod stylesheet {
     /// use common::stylesheet::StyleTransformation::*;
     /// let mut sheet = stylesheet::new();
     /// stylesheet::add_style(&mut sheet, "danger", StyleProperties {
-    ///     transformation: [Bold, Blink].to_vec(), color: Some(Red), background: Some(White)
+    ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
     /// });
     /// ```
     pub fn println(
@@ -186,13 +186,13 @@ mod tests {
 
         let style_name = "empty_guy";
         stylesheet::add_style(&mut sheet, style_name,
-            StyleProperties { transformation: [].to_vec(), color: None, background: None }
+            StyleProperties { transformation: [].to_vec(), color: None, background: None, }
         );
         assert!(sheet.get(style_name).is_some());
 
         let style_name = "empty_lady";
         stylesheet::add_style(&mut sheet, style_name,
-            StyleProperties { transformation: [].to_vec(), color: Some(DefaultColor), background: Some(DefaultColor) }
+            StyleProperties { transformation: [].to_vec(), color: Some(DefaultColor), background: Some(DefaultColor), }
         );
         assert!(sheet.get(style_name).is_some());
     }
@@ -204,9 +204,9 @@ mod tests {
         let style_name = "empty_guy";
         stylesheet::add_style(&mut sheet, style_name,
             StyleProperties {
-                transformation: [ Bold, Underlined ].to_vec(),
+                transformation: [ Bold, Underlined, ].to_vec(),
                 color: Some(Blue),
-                background: Some(White)
+                background: Some(White),
             }
         );
         assert!(sheet.get(style_name).is_some());
