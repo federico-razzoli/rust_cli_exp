@@ -16,6 +16,9 @@ pub enum StyleColor {
     Red,
     Green,
     Blue,
+    Cyan,
+    Magenta,
+    Yellow,
 }
 
 /// All properties that form a style.
@@ -103,6 +106,9 @@ pub mod stylesheet {
                 super::StyleColor::Red => style = style.red(),
                 super::StyleColor::Green => style = style.green(),
                 super::StyleColor::Blue => style = style.blue(),
+                super::StyleColor::Cyan => style = style.cyan(),
+                super::StyleColor::Magenta => style = style.magenta(),
+                super::StyleColor::Yellow => style = style.yellow(),
             }
         }
         // apply specified background color, unless it is None
@@ -115,6 +121,9 @@ pub mod stylesheet {
                 super::StyleColor::Red => style = style.on_red(),
                 super::StyleColor::Green => style = style.on_green(),
                 super::StyleColor::Blue => style = style.on_blue(),
+                super::StyleColor::Cyan => style = style.on_cyan(),
+                super::StyleColor::Magenta => style = style.on_magenta(),
+                super::StyleColor::Yellow => style = style.on_yellow(),
             }
         }
         //println!("{:?}", style);
