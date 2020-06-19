@@ -47,6 +47,5 @@ fn main() {
         transformation: [StyleTransformation::Bold, StyleTransformation::Blink].to_vec(), color: Some(StyleColor::Red), background: Some(StyleColor::White)
     });
 
-    //println!("{}", alert.apply_to("ALERT: Romulan ship approaching!"));
     stylesheet::println("ALERT: Romulan ship approaching!", sheet, "danger");
 }
