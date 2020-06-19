@@ -66,10 +66,13 @@ pub mod stylesheet {
     /// # Example
     ///
     /// ```
+    /// use common::stylesheet::*;
+    /// use common::stylesheet::StyleColor::*;
+    /// use common::stylesheet::StyleTransformation::*;
     /// let mut sheet = stylesheet::new();
-    /// sheet::add_style(&mut sheet, "danger", StyleProperties {
-    ///     transformation: [StyleTransformation::Bold, StyleTransformation::Blink].to_vec(), color: Some(StyleColor::Red), background: Some(StyleColor::White)
-    /// });;
+    /// stylesheet::add_style(&mut sheet, "danger", StyleProperties {
+    ///     transformation: [Bold, Blink].to_vec(), color: Some(Red), background: Some(White)
+    /// });
     /// ```
     pub fn add_style(
             sheet: &mut HashMap<&str, Style>,
@@ -127,10 +130,13 @@ pub mod stylesheet {
     /// # Example
     ///
     /// ```
+    /// use common::stylesheet::*;
+    /// use common::stylesheet::StyleColor::*;
+    /// use common::stylesheet::StyleTransformation::*;
     /// let mut sheet = stylesheet::new();
-    /// sheet::add_style(&mut sheet, "danger", StyleProperties {
-    ///     transformation: [StyleTransformation::Bold, StyleTransformation::Blink].to_vec(), color: Some(StyleColor::Red), background: Some(StyleColor::White)
-    /// });;
+    /// stylesheet::add_style(&mut sheet, "danger", StyleProperties {
+    ///     transformation: [Bold, Blink].to_vec(), color: Some(Red), background: Some(White)
+    /// });
     /// ```
     pub fn println(
             message: &str,
@@ -139,5 +145,50 @@ pub mod stylesheet {
         ) {
         let style = &sheet.get(style_name).unwrap_or_else(|| sheet.get("default").unwrap());
         println!("{}", style.apply_to(message));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use super::StyleColor::*;
+    use super::StyleTransformation::*;
+    use std::collections::HashMap;
+
+    extern crate console;
+    use self::console::Style;
+
+    #[test]
+    fn create_stylesheet() {
+        let sheet: HashMap<&str, Style> = stylesheet::new();
+        // must be a HashMap of Style's and only contain a "default" key
+        assert_eq!(sheet.len(), 1);
+        assert!(sheet.get("default").is_some());
+    }
+
+    #[test]
+    fn add_empty_style() {
+        let mut sheet = stylesheet::new();
+        // must be able to retrieve an empty style and retrieve it
+        let style_name = "empty_guy";
+        stylesheet::add_style(&mut sheet, style_name,
+            StyleProperties { transformation: [].to_vec(), color: None, background: None }
+        );
+        assert!(sheet.get(style_name).is_some());
+    }
+
+    #[test]
+    fn add_style() {
+        let mut sheet = stylesheet::new();
+        // must be able to retrieve a regular style and retrieve it
+        let style_name = "empty_guy";
+        stylesheet::add_style(&mut sheet, style_name,
+            StyleProperties {
+                transformation: [ Bold, Underlined ].to_vec(),
+                color: Some(Blue),
+                background: Some(White)
+            }
+        );
+        assert!(sheet.get(style_name).is_some());
     }
 }
