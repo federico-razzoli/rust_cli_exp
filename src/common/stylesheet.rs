@@ -150,13 +150,13 @@ pub mod stylesheet {
     ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
     /// });
     /// ```
-    pub fn println(
-            message: &str,
-            sheet: HashMap<&str, Style>,
+    pub fn println<S>(
+            message: S,
+            sheet: &HashMap<&str, Style>,
             style_name: &str
-        ) {
+        ) where S: AsRef<str> {
         let style = &sheet.get(style_name).unwrap_or_else(|| sheet.get("default").unwrap());
-        println!("{}", style.apply_to(message));
+        println!("{}", style.apply_to(message.as_ref()));
     }
 }
 

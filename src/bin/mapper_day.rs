@@ -14,12 +14,15 @@ use common::stylesheet::StyleTransformation;
 use common::stylesheet::StyleColor;
 
 
+const MAX_PLEASE: u64 = 3;
+
+
 // NOTE:
 // using this crate with default features enabled
 // and doing nearly nothing with it
 // makes a binary more than 600K bigger.
 extern crate clap;
-use clap::{Arg, App};
+use clap::{Arg, ArgMatches, App};
 
 #[derive(Debug)]
 struct Event {
@@ -28,8 +31,8 @@ struct Event {
 }
 
 impl Event {
-    pub fn print(&self, sheet: HashMap<&str, Style>) {
-        stylesheet::println(self.message, sheet, self.level);
+    pub fn print(&self, sheet: &HashMap<&str, Style>) {
+        stylesheet::println(self.message, &sheet, self.level);
     }
 }
 
@@ -47,19 +50,18 @@ const APP_INFO: AppInfo<'static> = AppInfo {
 
 
 fn main() {
-    App::new(APP_INFO.name)
+    let options: ArgMatches = App::new(APP_INFO.name)
         .about(APP_INFO.description)
         .version(APP_INFO.version)
         .arg(
             Arg::with_name("please")
             .short("p")
             .long("please")
-            .help("No practical effect, but it's good to be kind")
+            .multiple(true)
+            .help("No practical effect, but it's good to be kind. Specify multiple times to implore properly.")
             .takes_value(false)
         )
         .get_matches();
-
-    long_range_scanner::scan();
 
     let mut sheet = stylesheet::new();
     stylesheet::add_style(&mut sheet, "danger", StyleProperties {
@@ -68,6 +70,17 @@ fn main() {
     stylesheet::add_style(&mut sheet, "info", StyleProperties {
         transformation: [].to_vec(), color: Some(StyleColor::Green), background: None
     });
+    stylesheet::add_style(&mut sheet, "complain", StyleProperties {
+        transformation: [].to_vec(), color: Some(StyleColor::Yellow), background: None
+    });
+
+    let please_count: u64 = options.occurrences_of("please");
+    if please_count > MAX_PLEASE {
+        let message: String = format!("{}{}{}", "You said please ", &please_count, " times... please stop!");
+        stylesheet::println(message, &sheet, "complain");
+    }
+
+    long_range_scanner::scan();
 
     // Detect a random event
     let possible_events: [Event; 4] = [
@@ -78,5 +91,5 @@ fn main() {
     ];
     let rnd = rand::thread_rng().gen_range(0, possible_events.len());
     let event: &Event = possible_events.get(rnd).unwrap();
-    event.print(sheet);
+    event.print(&sheet);
 }
