@@ -211,4 +211,14 @@ mod tests {
         );
         assert!(sheet.get(style_name).is_some());
     }
+
+    #[test]
+    fn println() {
+        let sheet = stylesheet::new();
+        // must be able to println a &str and a String without panicking
+        stylesheet::println("Just a test String reference", &sheet, "default");
+        stylesheet::println("A cool String struct", &sheet, "default");
+        // did not panick
+        assert!(true);
+    }
 }
