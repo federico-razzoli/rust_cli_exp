@@ -159,6 +159,35 @@ pub mod stylesheet {
         let style = &sheet.get(style_name).unwrap_or_else(|| sheet.get("default").unwrap());
         println!("{}", style.apply_to(message.as_ref()));
     }
+
+    /// Similar to println(), but print() doesn't append a newline character.
+    ///
+    /// # Arguments
+    ///
+    /// * `message` - The string struct or string reference to print.
+    /// * `sheet` - A reference to a previously created stylesheet.
+    /// * `style_name` - The name of the style to use (&str).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use common::stylesheet::*;
+    /// use common::stylesheet::StyleColor::*;
+    /// use common::stylesheet::StyleTransformation::*;
+    /// let mut sheet = stylesheet::new();
+    /// stylesheet::add_style(&mut sheet, "danger", StyleProperties {
+    ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
+    /// });
+    /// stylesheet::print("Some text", &sheet, "danger");
+    /// ```
+    pub fn print<S>(
+            message: S,
+            sheet: &HashMap<&str, Style>,
+            style_name: &str
+        ) where S: AsRef<str> {
+        let style = &sheet.get(style_name).unwrap_or_else(|| sheet.get("default").unwrap());
+        print!("{}", style.apply_to(message.as_ref()));
+    }
 }
 
 #[cfg(test)]
@@ -219,6 +248,16 @@ mod tests {
         // must be able to println a &str and a String without panicking
         stylesheet::println("Just a test String reference", &sheet, "default");
         stylesheet::println("A cool String struct", &sheet, "default");
+        // did not panick
+        assert!(true);
+    }
+
+    #[test]
+    fn print() {
+        let sheet = stylesheet::new();
+        // must be able to print a &str and a String without panicking
+        stylesheet::print("A ", &sheet, "default");
+        stylesheet::print("B", &sheet, "default");
         // did not panick
         assert!(true);
     }
