@@ -135,7 +135,7 @@ pub mod stylesheet {
     ///
     /// # Arguments
     ///
-    /// * `message` - The string reference to print.
+    /// * `message` - The string struct or string reference to print.
     /// * `sheet` - A reference to a previously created stylesheet.
     /// * `style_name` - The name of the style to use (&str).
     ///
@@ -149,6 +149,7 @@ pub mod stylesheet {
     /// stylesheet::add_style(&mut sheet, "danger", StyleProperties {
     ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
     /// });
+    /// stylesheet::println("Some text", &sheet, "danger");
     /// ```
     pub fn println<S>(
             message: S,
