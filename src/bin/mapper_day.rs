@@ -1,10 +1,7 @@
 use std::collections::HashMap;
 
-extern crate rand;
-use rand::Rng;
-
 extern crate console;
-use console::Style;
+use self::console::Style;
 
 extern crate common;
 use common::scanner::long_range_scanner;
@@ -24,17 +21,6 @@ const MAX_PLEASE: u64 = 3;
 extern crate clap;
 use clap::{Arg, ArgMatches, App};
 
-#[derive(Debug)]
-struct Event {
-    level: &'static str,
-    message: &'static str,
-}
-
-impl Event {
-    pub fn print(&self, sheet: &HashMap<&str, Style>) {
-        stylesheet::println(self.message, &sheet, self.level);
-    }
-}
 
 struct AppInfo<'a> {
     name: &'a str,
@@ -63,7 +49,7 @@ fn main() {
         )
         .get_matches();
 
-    let mut sheet = stylesheet::new();
+    let mut sheet: HashMap<&str, Style> = stylesheet::new();
     stylesheet::add_style(&mut sheet, "danger", StyleProperties {
         transformation: [StyleTransformation::Bold, StyleTransformation::Blink].to_vec(), color: Some(StyleColor::Red), background: None
     });
@@ -80,16 +66,5 @@ fn main() {
         stylesheet::println(message, &sheet, "complain");
     }
 
-    long_range_scanner::scan();
-
-    // Detect a random event
-    let possible_events: [Event; 4] = [
-        Event { level: "info", message: "Whormhole detected" },
-        Event { level: "info", message: "Vulcan ship deteced" },
-        Event { level: "danger", message: "Romulan ship approaching!" },
-        Event { level: "danger", message: "Borg cube approaching!" },
-    ];
-    let rnd = rand::thread_rng().gen_range(0, possible_events.len());
-    let event: &Event = possible_events.get(rnd).unwrap();
-    event.print(&sheet);
+    long_range_scanner::scan().print(&sheet);
 }
