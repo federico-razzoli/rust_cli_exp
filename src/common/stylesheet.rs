@@ -9,6 +9,8 @@ use self::console::Style;
 pub enum StyleTransformation {
     Blink,
     Bold,
+    Bright,
+    Dim,
     Italic,
     Underlined,
 }
@@ -119,6 +121,8 @@ impl Stylesheet {
             match s {
                 StyleTransformation::Blink => style = style.blink(),
                 StyleTransformation::Bold => style = style.bold(),
+                StyleTransformation::Bright => style = style.bright(),
+                StyleTransformation::Dim => style = style.dim(),
                 StyleTransformation::Italic => style = style.italic(),
                 StyleTransformation::Underlined => style = style.underlined(),
             }
