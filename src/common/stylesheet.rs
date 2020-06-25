@@ -1,3 +1,9 @@
+use std::collections::HashMap;
+
+extern crate console;
+use self::console::Style;
+
+
 /// Transformations that can be applied to texts.
 #[derive(Debug, Clone)]
 pub enum StyleTransformation {
@@ -39,6 +45,168 @@ pub struct StyleProperties {
     /// The color to apply to the text background. The type is Option<StyleColor>.
     /// None means default.
     pub background: Option<StyleColor>,
+}
+
+
+/// Stylesheet struct creates and handles a stylesheet.
+/// A stylesheet is a library of named styles that can be applied to texts.
+/// A Stylesheet style will play in your code the same role that a named
+/// CSS style plays in an HTML document.
+pub struct Stylesheet {
+    styles: HashMap<&'static str, Style>
+}
+
+impl Stylesheet {
+    /// Return a new stylesheet. It only contains the "default" style,
+    /// that can be used explicitally and is used implicitally when
+    /// we try to use a non-existing style.
+    pub fn new() -> Stylesheet {
+        let mut hash: HashMap<&str, Style> = HashMap::new();
+        hash.insert("default", Style::new());
+
+        Stylesheet {
+            styles: hash
+        }
+    }
+
+    pub fn contains(&self, style_name: &str) -> bool {
+        self.styles.contains_key(style_name)
+    }
+
+    /// Add a style to an existing stylesheet.
+    ///
+    /// # Arguments
+    ///
+    /// * `style_name` - The name of the style to be added to the stylesheet (&str).
+    /// * `style_definition` - The definition of the style to be added to the stylesheet (StyleProperties).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use common::stylesheet::*;
+    /// use common::stylesheet::StyleColor::*;
+    /// use common::stylesheet::StyleTransformation::*;
+    /// let mut sheet = Stylesheet::new();
+    /// sheet.add_style("danger", StyleProperties {
+    ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
+    /// });
+    /// ```
+    pub fn add_style(
+            &mut self,
+            style_name: &'static str,
+            style_definition: StyleProperties
+        ) {
+        // style is a handler from console::Style.
+        // Based on the contents of style_definition call style functions
+        // to create a proper style.
+        let mut style: Style = Style::new();
+        // apply all specified transformations, if any
+        for s in &style_definition.transformation {
+            match s {
+                StyleTransformation::Blink => style = style.blink(),
+                StyleTransformation::Bold => style = style.bold(),
+                StyleTransformation::Italic => style = style.italic(),
+                StyleTransformation::Underlined => style = style.underlined(),
+            }
+        }
+        // apply specified text color, unless it is None
+        if style_definition.color.is_some() {
+            let color = &style_definition.color.unwrap();
+            match color {
+                StyleColor::DefaultColor => (),
+                StyleColor::Black => style = style.black(),
+                StyleColor::White => style = style.white(),
+                StyleColor::Red => style = style.red(),
+                StyleColor::Green => style = style.green(),
+                StyleColor::Blue => style = style.blue(),
+                StyleColor::Cyan => style = style.cyan(),
+                StyleColor::Magenta => style = style.magenta(),
+                StyleColor::Yellow => style = style.yellow(),
+            }
+        }
+        // apply specified background color, unless it is None
+        if style_definition.background.is_some() {
+            let color = &style_definition.background.unwrap();
+            match color {
+                StyleColor::DefaultColor => (),
+                StyleColor::Black => style = style.on_black(),
+                StyleColor::White => style = style.on_white(),
+                StyleColor::Red => style = style.on_red(),
+                StyleColor::Green => style = style.on_green(),
+                StyleColor::Blue => style = style.on_blue(),
+                StyleColor::Cyan => style = style.on_cyan(),
+                StyleColor::Magenta => style = style.on_magenta(),
+                StyleColor::Yellow => style = style.on_yellow(),
+            }
+        }
+        //println!("{:?}", style);
+
+        self.styles.insert(style_name, style);
+    }
+
+    /// Print a line (string reference), applying to it a single style.
+    ///
+    /// # Arguments
+    ///
+    /// * `style_name` - The name of the style to use (&str).
+    /// * `message` - The string struct or string reference to print.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use common::stylesheet::*;
+    /// use common::stylesheet::StyleColor::*;
+    /// use common::stylesheet::StyleTransformation::*;
+    /// let mut sheet = Stylesheet::new();
+    /// sheet.add_style("danger", StyleProperties {
+    ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
+    /// });
+    /// sheet.println("danger", "Some text");
+    /// ```
+    pub fn println<S>(
+            &self,
+            mut style_name: &str,
+            message: S
+        ) where S: AsRef<str> {
+        // if the requested style doesn't exist we fall back to default
+        if !self.contains(style_name) {
+            style_name = "default";
+        }
+        let style = self.styles.get(style_name).unwrap();
+        println!("{}", style.apply_to(message.as_ref()));
+    }
+
+    /// Similar to println(), but print() doesn't append a newline character.
+    ///
+    /// # Arguments
+    ///
+    /// * `style_name` - The name of the style to use (&str).
+    /// * `message` - The string struct or string reference to print.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use common::stylesheet::*;
+    /// use common::stylesheet::StyleColor::*;
+    /// use common::stylesheet::StyleTransformation::*;
+    /// let mut sheet = Stylesheet::new();
+    /// sheet.add_style("danger", StyleProperties {
+    ///     transformation: [Bold, Blink,].to_vec(), color: Some(Red), background: Some(White)
+    /// });
+    /// sheet.print("danger", "Some text");
+    /// ```
+    pub fn print<S>(
+            &self,
+            mut style_name: &str,
+            message: S
+        ) where S: AsRef<str> {
+        // if the requested style doesn't exist we fall back to default
+        if !self.contains(style_name) {
+            style_name = "default";
+        }
+        let style = self.styles.get(style_name).unwrap();
+        println!("{}", style.apply_to(message.as_ref()));
+    }
 }
 
 
@@ -195,69 +363,67 @@ mod tests {
     use super::*;
     use super::StyleColor::*;
     use super::StyleTransformation::*;
-    use std::collections::HashMap;
 
-    extern crate console;
-    use self::console::Style;
 
     #[test]
     fn create_stylesheet() {
-        let sheet: HashMap<&str, Style> = stylesheet::new();
+        let sheet: Stylesheet = Stylesheet::new();
         // must be a HashMap of Style's and only contain a "default" key
-        assert_eq!(sheet.len(), 1);
-        assert!(sheet.get("default").is_some());
+        assert!(sheet.contains("default"));
+        assert!(!sheet.contains("not-exists"));
     }
 
     #[test]
     fn add_empty_style() {
-        let mut sheet = stylesheet::new();
+        let mut sheet = Stylesheet::new();
         // must be able to retrieve an empty style and retrieve it
         // there are more ways to achieve this
 
         let style_name = "empty_guy";
-        stylesheet::add_style(&mut sheet, style_name,
+        sheet.add_style(style_name,
             StyleProperties { transformation: [].to_vec(), color: None, background: None, }
         );
-        assert!(sheet.get(style_name).is_some());
+        assert!(sheet.contains(style_name));
 
         let style_name = "empty_lady";
-        stylesheet::add_style(&mut sheet, style_name,
+        sheet.add_style(style_name,
             StyleProperties { transformation: [].to_vec(), color: Some(DefaultColor), background: Some(DefaultColor), }
         );
-        assert!(sheet.get(style_name).is_some());
+        assert!(sheet.contains(style_name));
     }
 
     #[test]
     fn add_style() {
-        let mut sheet = stylesheet::new();
+        let mut sheet = Stylesheet::new();
         // must be able to retrieve a regular style and retrieve it
-        let style_name = "empty_guy";
-        stylesheet::add_style(&mut sheet, style_name,
+        let style_name = "new_guy";
+        sheet.add_style(
+            style_name,
             StyleProperties {
                 transformation: [ Bold, Underlined, ].to_vec(),
                 color: Some(Blue),
                 background: Some(White),
             }
         );
-        assert!(sheet.get(style_name).is_some());
+        assert!(sheet.contains(style_name));
     }
 
     #[test]
     fn println() {
-        let sheet = stylesheet::new();
+        let sheet = Stylesheet::new();
         // must be able to println a &str and a String without panicking
-        stylesheet::println("Just a test String reference", &sheet, "default");
-        stylesheet::println("A cool String struct", &sheet, "default");
+        sheet.println("default", "Just a test String reference");
+        sheet.println("default", "A cool String struct");
         // did not panick
         assert!(true);
     }
 
     #[test]
     fn print() {
-        let sheet = stylesheet::new();
+        let sheet = Stylesheet::new();
         // must be able to print a &str and a String without panicking
-        stylesheet::print("A ", &sheet, "default");
-        stylesheet::print("B", &sheet, "default");
+        sheet.print("default", "A ");
+        sheet.print("default", "B");
         // did not panick
         assert!(true);
     }
