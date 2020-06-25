@@ -72,7 +72,7 @@ impl Stylesheet {
         }
     }
 
-    pub fn contains(&self, style_name: &str) -> bool {
+    fn contains(&self, style_name: &str) -> bool {
         self.styles.contains_key(style_name)
     }
 
