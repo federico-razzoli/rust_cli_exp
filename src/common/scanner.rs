@@ -1,9 +1,4 @@
-use std::collections::HashMap;
-
-extern crate console;
-use self::console::Style;
-
-use stylesheet::stylesheet;
+use stylesheet::Stylesheet;
 
 
 #[derive(Debug, Clone, Copy)]
@@ -13,8 +8,8 @@ pub struct Event {
 }
 
 impl Event {
-    pub fn print(&self, sheet: &HashMap<&str, Style>) {
-        stylesheet::println(self.message, &sheet, self.level);
+    pub fn print(&self, sheet: &Stylesheet) {
+        sheet.println(self.level, self.message);
     }
 }
 

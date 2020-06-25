@@ -1,11 +1,6 @@
-use std::collections::HashMap;
-
-extern crate console;
-use self::console::Style;
-
 extern crate common;
 use common::scanner::long_range_scanner;
-use common::stylesheet::stylesheet;
+use common::stylesheet::Stylesheet;
 use common::stylesheet::StyleProperties;
 use common::stylesheet::StyleTransformation;
 use common::stylesheet::StyleColor;
@@ -49,21 +44,21 @@ fn main() {
         )
         .get_matches();
 
-    let mut sheet: HashMap<&str, Style> = stylesheet::new();
-    stylesheet::add_style(&mut sheet, "danger", StyleProperties {
+    let mut sheet: Stylesheet = Stylesheet::new();
+    sheet.add_style("danger", StyleProperties {
         transformation: [StyleTransformation::Bold, StyleTransformation::Blink].to_vec(), color: Some(StyleColor::Red), background: None
     });
-    stylesheet::add_style(&mut sheet, "info", StyleProperties {
+    sheet.add_style("info", StyleProperties {
         transformation: [].to_vec(), color: Some(StyleColor::Green), background: None
     });
-    stylesheet::add_style(&mut sheet, "complain", StyleProperties {
+    sheet.add_style("complain", StyleProperties {
         transformation: [].to_vec(), color: Some(StyleColor::Yellow), background: None
     });
 
     let please_count: u64 = options.occurrences_of("please");
     if please_count > MAX_PLEASE {
         let message: String = format!("{}{}{}", "You said please ", &please_count, " times... please stop!");
-        stylesheet::println(message, &sheet, "complain");
+        sheet.println("complain", message);
     }
 
     long_range_scanner::scan().print(&sheet);
