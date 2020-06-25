@@ -57,12 +57,15 @@ pub struct Stylesheet {
 }
 
 impl Stylesheet {
-    /// Return a new stylesheet. It only contains the "default" style,
+    const DEFAULT_STYLE: &'static str = "_default";
+
+
+    /// Return a new stylesheet. It only contains DEFAULT_STYLE,
     /// that can be used explicitally and is used implicitally when
     /// we try to use a non-existing style.
     pub fn new() -> Stylesheet {
         let mut hash: HashMap<&str, Style> = HashMap::new();
-        hash.insert("default", Style::new());
+        hash.insert(Stylesheet::DEFAULT_STYLE, Style::new());
 
         Stylesheet {
             styles: hash
@@ -170,7 +173,7 @@ impl Stylesheet {
         ) where S: AsRef<str> {
         // if the requested style doesn't exist we fall back to default
         if !self.contains(style_name) {
-            style_name = "default";
+            style_name = Stylesheet::DEFAULT_STYLE;
         }
         let style = self.styles.get(style_name).unwrap();
         println!("{}", style.apply_to(message.as_ref()));
@@ -202,7 +205,7 @@ impl Stylesheet {
         ) where S: AsRef<str> {
         // if the requested style doesn't exist we fall back to default
         if !self.contains(style_name) {
-            style_name = "default";
+            style_name = Stylesheet::DEFAULT_STYLE;
         }
         let style = self.styles.get(style_name).unwrap();
         println!("{}", style.apply_to(message.as_ref()));
@@ -368,8 +371,8 @@ mod tests {
     #[test]
     fn create_stylesheet() {
         let sheet: Stylesheet = Stylesheet::new();
-        // must be a HashMap of Style's and only contain a "default" key
-        assert!(sheet.contains("default"));
+        // must be a HashMap of Style's and only contain DEFAULT_STYLE key
+        assert!(sheet.contains(Stylesheet::DEFAULT_STYLE));
         assert!(!sheet.contains("not-exists"));
     }
 
@@ -412,8 +415,8 @@ mod tests {
     fn println() {
         let sheet = Stylesheet::new();
         // must be able to println a &str and a String without panicking
-        sheet.println("default", "Just a test String reference");
-        sheet.println("default", "A cool String struct");
+        sheet.println(Stylesheet::DEFAULT_STYLE, "Just a test String reference");
+        sheet.println(Stylesheet::DEFAULT_STYLE, "A cool String struct");
         // did not panick
         assert!(true);
     }
@@ -422,8 +425,8 @@ mod tests {
     fn print() {
         let sheet = Stylesheet::new();
         // must be able to print a &str and a String without panicking
-        sheet.print("default", "A ");
-        sheet.print("default", "B");
+        sheet.print(Stylesheet::DEFAULT_STYLE, "A ");
+        sheet.print(Stylesheet::DEFAULT_STYLE, "B");
         // did not panick
         assert!(true);
     }
