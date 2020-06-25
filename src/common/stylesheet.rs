@@ -53,7 +53,7 @@ pub struct StyleProperties {
 /// A Stylesheet style will play in your code the same role that a named
 /// CSS style plays in an HTML document.
 pub struct Stylesheet {
-    styles: HashMap<&'static str, Style>
+    styles: HashMap<&'static str, Style>,
 }
 
 impl Stylesheet {
@@ -68,7 +68,7 @@ impl Stylesheet {
         hash.insert(Stylesheet::DEFAULT_STYLE, Style::new());
 
         Stylesheet {
-            styles: hash
+            styles: hash,
         }
     }
 
