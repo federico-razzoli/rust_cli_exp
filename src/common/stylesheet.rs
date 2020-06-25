@@ -72,6 +72,7 @@ impl Stylesheet {
         }
     }
 
+    #[cfg(test)]
     fn len(&self) -> usize {
         self.styles.len()
     }
