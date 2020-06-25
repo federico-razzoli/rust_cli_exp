@@ -104,7 +104,7 @@ impl Stylesheet {
     pub fn add_style(
             &mut self,
             style_name: &'static str,
-            style_definition: StyleProperties
+            style_definition: StyleProperties,
         ) {
         if self.is_frozen {
             panic!("FATAL: Trying to add a style to a frozen Stylesheet");
@@ -199,7 +199,7 @@ impl Stylesheet {
     pub fn println<S>(
             &self,
             mut style_name: &str,
-            message: S
+            message: S,
         ) where S: AsRef<str> {
         // if the requested style doesn't exist we fall back to default
         if !self.contains(style_name) {
@@ -231,7 +231,7 @@ impl Stylesheet {
     pub fn print<S>(
             &self,
             mut style_name: &str,
-            message: S
+            message: S,
         ) where S: AsRef<str> {
         // if the requested style doesn't exist we fall back to default
         if !self.contains(style_name) {
