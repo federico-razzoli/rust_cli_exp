@@ -72,6 +72,10 @@ impl Stylesheet {
         }
     }
 
+    fn len(&self) -> usize {
+        self.styles.len()
+    }
+
     fn contains(&self, style_name: &str) -> bool {
         self.styles.contains_key(style_name)
     }
@@ -373,7 +377,7 @@ mod tests {
         let sheet: Stylesheet = Stylesheet::new();
         // must be a HashMap of Style's and only contain DEFAULT_STYLE key
         assert!(sheet.contains(Stylesheet::DEFAULT_STYLE));
-        assert!(!sheet.contains("not-exists"));
+        assert_eq!(sheet.len(), 1);
     }
 
     #[test]
